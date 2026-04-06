@@ -3,64 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Abubakr Moliya Super App</title>
+    <title>Abubakr AI Moliya</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: -apple-system, sans-serif; margin: 0; background-color: #f0f2f5; height: 100vh; display: flex; overflow: hidden; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; background-color: #f0f2f5; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* Yon Menyu - TrueGis Style */
-        .side-bar { width: 65px; background: white; height: 85vh; margin: auto 12px; border-radius: 28px; display: flex; flex-direction: column; align-items: center; justify-content: space-around; padding: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #efefef; z-index: 100; }
-        .side-item { font-size: 24px; cursor: pointer; transition: 0.2s; opacity: 0.5; }
-        .side-item:active { transform: scale(0.8); opacity: 1; }
-        .side-item.active { opacity: 1; color: #007bff; }
+        /* Chat maydoni */
+        #chat-content { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+        
+        /* Welcome Box */
+        .welcome-box { text-align: center; margin-top: 40px; transition: 0.3s; }
+        .logo { width: 75px; height: 75px; background: white; border-radius: 28px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.06); font-size: 38px; }
 
-        /* Asosiy Kontent */
-        .main-container { flex: 1; display: flex; flex-direction: column; position: relative; }
-        
-        /* Chat xabarlari maydoni */
-        #chat-content { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 100px; }
-        
-        /* Welcome Screen */
-        .welcome { text-align: center; margin-top: 80px; }
-        .logo-box { width: 75px; height: 75px; background: white; border-radius: 28px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 35px rgba(0,0,0,0.06); font-size: 40px; }
+        /* TRUEGIS STYLE TUGMALAR (Kartochkalar) */
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; margin-top: 25px; }
+        .tool-card { 
+            background: white; padding: 15px; border-radius: 22px; 
+            display: flex; align-items: center; gap: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); cursor: pointer;
+            transition: 0.2s; border: 1px solid #f0f0f0;
+        }
+        .tool-card:active { transform: scale(0.94); background: #f9f9f9; }
+        .tool-icon { width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
 
         /* Xabarlar dizayni */
-        .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.4; }
-        .user { align-self: flex-end; background: white; color: black; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .msg { max-width: 85%; padding: 12px 16px; border-radius: 20px; font-size: 15px; line-height: 1.4; }
+        .user { align-self: flex-end; background: white; color: black; border-bottom-right-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .ai { align-self: flex-start; background: transparent; color: #1c1c1e; font-weight: 500; }
 
-        /* Pastki Input Area */
-        .bottom-nav { position: fixed; bottom: 20px; left: 85px; right: 15px; background: white; border-radius: 35px; padding: 8px 15px; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #eee; }
+        /* Input qismi */
+        .footer { padding: 15px; background: transparent; }
+        .input-wrapper { 
+            background: white; border-radius: 35px; padding: 10px 18px; 
+            display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08); border: 1px solid #eee;
+        }
         .chat-input { flex: 1; border: none; outline: none; font-size: 16px; background: transparent; }
-        
-        .action-btn { width: 42px; height: 42px; background: #007bff; border: none; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+        .action-btn { width: 44px; height: 44px; background: #007bff; border-radius: 50%; color: white; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 20px; }
         .recording { background: #ff3b30; animation: pulse 1.2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); box-shadow: 0 0 15px rgba(255,59,48,0.5); } 100% { transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); box-shadow: 0 0 15px rgba(255,59,48,0.4); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
-    <div class="side-bar">
-        <span class="side-item" onclick="sendAction('stats')">📊</span>
-        <span class="side-item" onclick="sendAction('add')">➕</span>
-        <span class="side-item" onclick="sendAction('home')">🏠</span>
-        <span class="side-item" onclick="sendAction('settings')">⚙️</span>
-        <div style="width: 15px; height: 15px; background: #ddd; border-radius: 4px;"></div>
-    </div>
+    <div id="chat-content">
+        <div class="welcome-box" id="welcomeArea">
+            <div class="logo">💰</div>
+            <h2 style="margin:0; font-size: 22px; font-weight: 800;">Abubakr Moliya AI</h2>
+            <p style="color: #8e8e93; font-size: 15px; margin-top: 5px;">Bugun nimalarni hisoblaymiz? ✨</p>
 
-    <div class="main-container">
-        <div id="chat-content">
-            <div class="welcome" id="welcome-area">
-                <div class="logo-box">💰</div>
-                <h2 style="margin:0; font-size: 22px;">Abubakr Moliya AI</h2>
-                <p style="color: #8e8e93; font-size: 14px;">Bugun nimalarni hisoblaymiz? ✨</p>
+            <div class="tools-grid">
+                <div class="tool-card" onclick="sendAction('hisobot', '📊 Hisobotlar')">
+                    <div class="tool-icon" style="background: #e3f2fd; color: #1e88e5;">📊</div>
+                    <span style="font-size: 14px; font-weight: 600;">Hisobot</span>
+                </div>
+                <div class="tool-card" onclick="sendAction('xarajat', '➕ Xarajat')">
+                    <div class="tool-icon" style="background: #fff3e0; color: #fb8c00;">➕</div>
+                    <span style="font-size: 14px; font-weight: 600;">Xarajat</span>
+                </div>
+                <div class="tool-card" onclick="sendAction('uy', '🏠 Ko\'chmas mulk')">
+                    <div class="tool-icon" style="background: #f1f8e9; color: #7cb342;">🏠</div>
+                    <span style="font-size: 14px; font-weight: 600;">Mulk</span>
+                </div>
+                <div class="tool-card" onclick="sendAction('sozlamalar', '⚙️ Sozlamalar')">
+                    <div class="tool-icon" style="background: #f3e5f5; color: #8e24aa;">⚙️</div>
+                    <span style="font-size: 14px; font-weight: 600;">Sozlama</span>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="bottom-nav">
-            <span style="font-size: 22px; color: #b0b0b0;">📎</span>
+    <div class="footer">
+        <div class="input-wrapper">
+            <span style="font-size: 24px; color: #b0b0b0;">📎</span>
             <input type="text" id="userInput" class="chat-input" placeholder="Напишите я найду">
-            <span style="font-size: 18px; color: #b0b0b0;">🌐</span>
             <button class="action-btn" id="mainBtn" onclick="handleInput()">🎤</button>
         </div>
     </div>
@@ -69,22 +85,24 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        const chatArea = document.getElementById('chat-content');
-        const welcome = document.getElementById('welcome-area');
         const input = document.getElementById('userInput');
         const btn = document.getElementById('mainBtn');
+        const chatContent = document.getElementById('chat-content');
+        const welcome = document.getElementById('welcomeArea');
 
         input.addEventListener('input', () => {
-            btn.innerText = input.value.trim() ? "🚀" : "🎤";
+            btn.innerHTML = input.value.trim() ? "🚀" : "🎤";
         });
 
         function addMessage(text, isUser) {
-            welcome.style.display = 'none';
+            welcome.style.opacity = '0';
+            setTimeout(() => welcome.style.display = 'none', 300);
+            
             const div = document.createElement('div');
             div.className = `msg ${isUser ? 'user' : 'ai'}`;
             div.innerText = text;
-            chatArea.appendChild(div);
-            chatArea.scrollTop = chatArea.scrollHeight;
+            chatContent.appendChild(div);
+            chatContent.scrollTop = chatContent.scrollHeight;
         }
 
         function handleInput() {
@@ -93,29 +111,28 @@
                 addMessage(val, true);
                 tg.sendData(JSON.stringify({type: 'chat', data: val}));
                 input.value = "";
-                btn.innerText = "🎤";
-                // Mini App-ni yopmaymiz, chat shu yerda davom etadi
+                btn.innerHTML = "🎤";
             } else {
-                toggleVoice();
+                startVoice();
             }
         }
 
-        function toggleVoice() {
+        function sendAction(type, label) {
+            tg.HapticFeedback.impactOccurred('medium');
+            addMessage(label + " tanlandi", true);
+            tg.sendData(JSON.stringify({type: 'action', data: type}));
+        }
+
+        function startVoice() {
+            tg.HapticFeedback.notificationOccurred('success');
             btn.classList.toggle('recording');
-            tg.HapticFeedback.impactOccurred('heavy');
-            if (btn.classList.contains('recording')) {
+            if(btn.classList.contains('recording')) {
                 input.placeholder = "Ovoz yozilmoqda...";
             } else {
                 input.placeholder = "Напишите я найду";
                 addMessage("🎤 Ovozli xabar yuborildi", true);
                 tg.sendData(JSON.stringify({type: 'voice', data: 'voice_note'}));
             }
-        }
-
-        function sendAction(act) {
-            tg.HapticFeedback.notificationOccurred('success');
-            addMessage(`Buyruq: ${act}`, true);
-            tg.sendData(JSON.stringify({type: 'action', data: act}));
         }
     </script>
 </body>
