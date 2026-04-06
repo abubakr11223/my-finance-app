@@ -2,88 +2,76 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance SuperApp</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Finance Super App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #0e1117; color: white; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        /* ChatGPT Chat Oynasi */
-        .chat-container { flex: 1; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
-        .message { margin-bottom: 15px; padding: 10px 15px; border-radius: 15px; max-width: 80%; line-height: 1.4; }
-        .ai { background: #21262d; align-self: flex-start; border-bottom-left-radius: 2px; }
-        .user { background: #007bff; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .chat-input { background: #161b22; padding: 15px; display: flex; gap: 10px; border-top: 1px solid #30363d; }
-        input { flex: 1; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 8px; outline: none; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #000; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
-        /* Menyu Tugmasi */
-        .menu-btn { position: fixed; top: 15px; right: 15px; background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(0,123,255,0.3); z-index: 100; }
+        /* Yuqori qism */
+        .header { text-align: center; padding: 20px; position: relative; }
+        .logo { width: 80px; height: 80px; background: linear-gradient(135deg, #007bff, #00c6ff); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,123,255,0.3); }
+        .logo img { width: 50px; }
+        .title { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
         
-        /* Menyu Oynasi */
-        .side-menu { position: fixed; top: 0; right: -100%; width: 250px; height: 100%; background: #161b22; transition: 0.3s; padding: 60px 20px 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 90; }
-        .side-menu.active { right: 0; }
-        .menu-item { padding: 15px; border-bottom: 1px solid #30363d; cursor: pointer; display: block; text-decoration: none; color: white; font-size: 18px; }
-        .menu-item:hover { background: #21262d; }
+        /* Chat xabari */
+        .welcome-msg { background: white; margin: 10px 20px; padding: 15px; border-radius: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-weight: 500; }
         
-        /* Hisobot Oynasi (Grafik) */
-        #report-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0e1117; z-index: 110; display: none; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .back-btn { background: #30363d; color: white; border: none; padding: 10px; border-radius: 8px; margin-bottom: 20px; width: 100%; font-weight: bold; }
-        .card { background: #161b22; border-radius: 16px; padding: 20px; margin-bottom: 20px; text-align: center; }
-        .balance { font-size: 28px; color: #00ff88; font-weight: bold; }
+        /* Tugmalar to'plami */
+        .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px 20px; }
+        .action-btn { background: white; border: none; padding: 12px; border-radius: 20px; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.1s; }
+        .action-btn:active { transform: scale(0.95); background: #eef; }
+
+        /* Super App yorlig'i (Yon tomonda) */
+        .side-label { position: fixed; left: 0; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: left bottom; background: #007bff; color: white; padding: 5px 15px; border-radius: 10px 10px 0 0; font-size: 10px; font-weight: bold; letter-spacing: 1px; }
+
+        /* Pastki qism (Input) */
+        .footer-input { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; display: flex; align-items: center; gap: 10px; border-top: 1px solid #eee; }
+        .input-box { flex: 1; background: #f0f2f5; border-radius: 25px; padding: 10px 15px; display: flex; align-items: center; color: #8e8e93; font-size: 14px; }
+        .icon-btn { color: #007bff; font-size: 20px; cursor: pointer; }
+
+        /* Hisobot Ekran (Yashirin) */
+        #report-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f0f2f5; z-index: 100; display: none; padding: 20px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <button class="menu-btn" onclick="toggleMenu()">☰ Menyu</button>
+    <div class="side-label">📊 SUPER APP</div>
 
-    <div class="chat-container">
-        <div class="message ai">Salom Abubakr! Bugun qanday xarajatlarni hisobga olamiz? Men ChatGPT kabi aqlliman, so'rashingiz mumkin.</div>
-    </div>
-    <div class="chat-input">
-        <input type="text" placeholder="Xabarni yozing...">
-        <button style="background:none; border:none; color:#007bff; font-weight:bold; cursor:pointer;">Yuborish</button>
+    <div class="header">
+        <div class="logo">💰</div>
+        <div class="title">Abubakr Moliya AI</div>
     </div>
 
-    <div id="sideMenu" class="side-menu">
-        <div class="menu-item" onclick="showReport()">📊 Hisobot</div>
-        <div class="menu-item">⚙️ Sozlamalar</div>
-        <div class="menu-item" onclick="toggleMenu()">❌ Yopish</div>
+    <div class="welcome-msg">
+        Salom! Bugun nimalarni hisobga olamiz? 👋
+    </div>
+
+    <div class="button-grid">
+        <button class="action-btn" onclick="showReport()">📊 Hisobotni ko'rish</button>
+        <button class="action-btn">➕ Xarajat qo'shish</button>
+        <button class="action-btn">🏦 Balans</button>
+        <button class="action-btn">⚙️ Sozlamalar</button>
+    </div>
+
+    <div class="footer-input">
+        <span class="icon-btn">📎</span>
+        <div class="input-box">Xabarni yozing...</div>
+        <span class="icon-btn">🎤</span>
     </div>
 
     <div id="report-screen">
-        <button class="back-btn" onclick="hideReport()">⬅️ Ortga qaytish (Chatga)</button>
-        <div class="card">
-            <p style="color: #8b949e; margin: 0;">UMUMIY BALANS</p>
-            <div class="balance">12 450 000 UZS</div>
+        <button onclick="hideReport()" style="width:100%; padding:10px; border-radius:10px; border:none; background:#007bff; color:white; font-weight:bold;">⬅️ Chatga qaytish</button>
+        <h2 style="text-align:center;">Moliya Analitikasi</h2>
+        <p style="text-align:center; font-size:24px; font-weight:bold;">12 450 000 UZS</p>
         </div>
-        <div class="card">
-            <canvas id="financeChart"></canvas>
-        </div>
-    </div>
 
     <script>
-        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active'); }
-        function showReport() { 
-            document.getElementById('report-screen').style.display = 'block'; 
-            toggleMenu();
-            renderChart();
-        }
-        function hideReport() { document.getElementById('report-screen').style.display = 'none'; }
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Appni to'liq ekranga ochish
 
-        function renderChart() {
-            const ctx = document.getElementById('financeChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Ovqat', 'Yo\'l', 'Uy', 'Boshqa'],
-                    datasets: [{
-                        data: [40, 20, 25, 15],
-                        backgroundColor: ['#ff4b5c', '#007bff', '#ffca28', '#00ff88'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
-            });
-        }
+        function showReport() { document.getElementById('report-screen').style.display = 'block'; }
+        function hideReport() { document.getElementById('report-screen').style.display = 'none'; }
     </script>
 </body>
 </html>
