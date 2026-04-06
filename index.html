@@ -3,75 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finance Super App</title>
+    <title>Abubakr AI Finance</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #000; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        
-        /* Yuqori qism */
-        .header { text-align: center; padding: 20px; position: relative; }
-        .logo { width: 80px; height: 80px; background: linear-gradient(135deg, #007bff, #00c6ff); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,123,255,0.3); }
-        .logo img { width: 50px; }
-        .title { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
-        
-        /* Chat xabari */
-        .welcome-msg { background: white; margin: 10px 20px; padding: 15px; border-radius: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-weight: 500; }
-        
-        /* Tugmalar to'plami */
-        .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px 20px; }
-        .action-btn { background: white; border: none; padding: 12px; border-radius: 20px; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.1s; }
-        .action-btn:active { transform: scale(0.95); background: #eef; }
+        /* TrueGis Style: Professional dizayn */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; background-color: #f0f2f5; color: #000; 
+            display: flex; height: 100vh; overflow: hidden; 
+        }
 
-        /* Super App yorlig'i (Yon tomonda) */
-        .side-label { position: fixed; left: 0; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: left bottom; background: #007bff; color: white; padding: 5px 15px; border-radius: 10px 10px 0 0; font-size: 10px; font-weight: bold; letter-spacing: 1px; }
+        /* YON TARAFFAGI OQ MENYU (1ga1) */
+        .side-bar {
+            width: 60px; background: white; height: 85vh; margin: auto 12px;
+            border-radius: 28px; display: flex; flex-direction: column; 
+            align-items: center; justify-content: space-around; padding: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #efefef;
+            z-index: 100;
+        }
+        .side-item { font-size: 24px; cursor: pointer; transition: 0.2s; filter: grayscale(0.5); }
+        .side-item:active { transform: scale(0.9); filter: grayscale(0); }
 
-        /* Pastki qism (Input) */
-        .footer-input { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; display: flex; align-items: center; gap: 10px; border-top: 1px solid #eee; }
-        .input-box { flex: 1; background: #f0f2f5; border-radius: 25px; padding: 10px 15px; display: flex; align-items: center; color: #8e8e93; font-size: 14px; }
-        .icon-btn { color: #007bff; font-size: 20px; cursor: pointer; }
+        /* ASOSIY KONTEYNER */
+        .main-app { flex: 1; display: flex; flex-direction: column; position: relative; }
 
-        /* Hisobot Ekran (Yashirin) */
-        #report-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f0f2f5; z-index: 100; display: none; padding: 20px; box-sizing: border-box; }
+        /* HEADER QISMI */
+        .header { text-align: center; padding: 60px 20px 0; }
+        .logo-box { 
+            width: 75px; height: 75px; background: white; border-radius: 28px; 
+            margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06); position: relative;
+        }
+        .logo-box::after {
+            content: ''; position: absolute; width: 60px; height: 60px; 
+            background: #007bff; filter: blur(35px); opacity: 0.1; z-index: -1;
+        }
+        .bot-name { font-size: 22px; font-weight: 800; color: #1c1c1e; }
+
+        /* WELCOME TEXT */
+        .hero { font-size: 20px; font-weight: 700; text-align: center; margin-top: 35px; color: #1c1c1e; }
+        .hero-sub { text-align: center; color: #8e8e93; font-size: 15px; margin-top: 6px; }
+
+        /* PASTKI PROFESSIONAL INPUT (1:1) */
+        .bottom-nav {
+            position: fixed; bottom: 20px; left: 85px; right: 15px;
+            background: white; border-radius: 40px; padding: 10px 18px;
+            display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1); border: 1px solid #f0f0f0;
+        }
+        .chat-input { flex: 1; border: none; outline: none; font-size: 16px; background: transparent; }
+        .mic-btn-blue {
+            width: 44px; height: 44px; background: #007bff;
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; color: white; font-size: 20px;
+            box-shadow: 0 5px 15px rgba(0,123,255,0.3); border: none; cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <div class="side-label">📊 SUPER APP</div>
-
-    <div class="header">
-        <div class="logo">💰</div>
-        <div class="title">Abubakr Moliya AI</div>
+    <div class="side-bar">
+        <span class="side-item">🍔</span>
+        <span class="side-item">🩺</span>
+        <span class="side-item">📚</span>
+        <span class="side-item">🏠</span>
+        <span class="side-item">🛠</span>
+        <span class="side-item">💅</span>
+        <div style="width: 15px; height: 15px; background: #ddd; border-radius: 4px;"></div>
     </div>
 
-    <div class="welcome-msg">
-        Salom! Bugun nimalarni hisobga olamiz? 👋
-    </div>
-
-    <div class="button-grid">
-        <button class="action-btn" onclick="showReport()">📊 Hisobotni ko'rish</button>
-        <button class="action-btn">➕ Xarajat qo'shish</button>
-        <button class="action-btn">🏦 Balans</button>
-        <button class="action-btn">⚙️ Sozlamalar</button>
-    </div>
-
-    <div class="footer-input">
-        <span class="icon-btn">📎</span>
-        <div class="input-box">Xabarni yozing...</div>
-        <span class="icon-btn">🎤</span>
-    </div>
-
-    <div id="report-screen">
-        <button onclick="hideReport()" style="width:100%; padding:10px; border-radius:10px; border:none; background:#007bff; color:white; font-weight:bold;">⬅️ Chatga qaytish</button>
-        <h2 style="text-align:center;">Moliya Analitikasi</h2>
-        <p style="text-align:center; font-size:24px; font-weight:bold;">12 450 000 UZS</p>
+    <div class="main-app">
+        <div class="header">
+            <div class="logo-box"><span style="font-size: 40px;">💰</span></div>
+            <div class="bot-name">Abubakr Moliya AI</div>
         </div>
+
+        <div class="hero">Привет, я Abubakr AI 👋</div>
+        <div class="hero-sub">Какие планы на сегодня? ✨</div>
+
+        <div class="bottom-nav">
+            <span style="font-size: 24px; color: #b0b0b0; transform: rotate(45deg);">📎</span>
+            <input type="text" id="userInput" class="chat-input" placeholder="Напишите я найду">
+            <div style="display:flex; gap:15px; align-items:center;">
+                <span style="font-size: 22px; color: #b0b0b0;">🌐</span>
+                <button class="mic-btn-blue" onclick="sendToBot()">🎤</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Appni to'liq ekranga ochish
+        tg.expand();
+        tg.headerColor = '#f0f2f5';
+        tg.backgroundColor = '#f0f2f5';
 
-        function showReport() { document.getElementById('report-screen').style.display = 'block'; }
-        function hideReport() { document.getElementById('report-screen').style.display = 'none'; }
+        function sendToBot() {
+            let val = document.getElementById('userInput').value;
+            if(val.trim() !== "") {
+                tg.sendData(val); // Botga (Python) xabar yuborish
+                tg.close(); // Mini Appni yopib, chatga qaytish
+            }
+        }
     </script>
 </body>
 </html>
