@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Abubakr AI Super App</title>
+    <title>Abubakr Moliya Super App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { font-family: -apple-system, sans-serif; margin: 0; background-color: #f0f2f5; height: 100vh; overflow: hidden; display: flex; }
         
-        /* Yon Menyu - Skrinshotingizdagi kabi */
+        /* Yon Menyu - TrueGis Style */
         .side-bar {
             width: 60px; background: white; height: 85vh; margin: auto 12px;
             border-radius: 28px; display: flex; flex-direction: column; 
@@ -33,7 +33,7 @@
         }
         .chat-input { flex: 1; border: none; outline: none; font-size: 16px; background: transparent; }
         
-        .mic-btn {
+        .send-btn {
             width: 44px; height: 44px; background: #007bff; border: none;
             border-radius: 50%; display: flex; align-items: center;
             justify-content: center; color: white; font-size: 20px; cursor: pointer;
@@ -44,7 +44,7 @@
 
     <div class="side-bar">
         <span class="side-item" onclick="sendAction('hisobot')">📊</span>
-        <span class="side-item" onclick="sendAction('xarajat')">➕</span>
+        <span class="side-item" onclick="sendAction('ovqat')">🍔</span>
         <span class="side-item" onclick="sendAction('uy')">🏠</span>
         <span class="side-item" onclick="sendAction('sozlamalar')">⚙️</span>
         <div style="width: 15px; height: 15px; background: #ddd; border-radius: 4px;"></div>
@@ -57,14 +57,14 @@
         </div>
 
         <div style="text-align:center; margin-top:35px;">
-            <h2 id="status">Привет, я Abubakr AI 👋</h2>
-            <p style="color: #8e8e93;">Bugun nimalarni rejalashtiramiz? ✨</p>
+            <h2>Привет, я Abubakr AI 👋</h2>
+            <p style="color: #8e8e93;">Bugun nimalarni hisoblaymiz? ✨</p>
         </div>
 
         <div class="bottom-nav">
             <span style="font-size: 24px; color: #b0b0b0;">📎</span>
             <input type="text" id="userInput" class="chat-input" placeholder="Xabarni yozing...">
-            <button class="mic-btn" id="sendBtn" onclick="handleSend()">🎤</button>
+            <button class="send-btn" id="sendBtn" onclick="handleSend()">🚀</button>
         </div>
     </div>
 
@@ -73,28 +73,22 @@
         tg.expand();
 
         const input = document.getElementById('userInput');
-        const btn = document.getElementById('sendBtn');
 
-        // Yozish boshlanganda mikrofonni "Yuborish" ikonkasiga o'zgartirish
-        input.addEventListener('input', () => {
-            btn.innerText = input.value.trim() ? "🚀" : "🎤";
-        });
-
-        // Xabar yuborish funksiyasi
+        // Xabarni botga yuborish
         function handleSend() {
             const val = input.value.trim();
             if (val) {
-                // Ma'lumotni JSON ko'rinishida Python-ga yuboramiz
-                tg.sendData(JSON.stringify({type: 'chat', text: val}));
+                tg.sendData(JSON.stringify({type: 'chat', data: val}));
                 input.value = "";
-                btn.innerText = "🎤";
+                tg.close(); // Xabar ketgach oynani yopish
             }
         }
 
-        // Yon menyu tugmalari uchun funksiya
+        // Tugmalar bosilganda botga buyruq yuborish
         function sendAction(action) {
-            tg.HapticFeedback.impactOccurred('medium'); // Tebranish
+            tg.HapticFeedback.impactOccurred('medium');
             tg.sendData(JSON.stringify({type: 'action', data: action}));
+            tg.close();
         }
     </script>
 </body>
