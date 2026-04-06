@@ -1,224 +1,89 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finance SuperApp Pro</title>
-    
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance SuperApp</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(255, 255, 255, 0.06);
-            --accent-color: #38bdf8;
-            --success-color: #4ade80;
-            --danger-color: #f87171;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: #f8fafc;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            -webkit-user-select: none;
-            overflow-x: hidden;
-        }
-
-        /* Header qismi */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .avatar {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(45deg, var(--accent-color), #818cf8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        /* Asosiy balans kartasi */
-        .main-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 28px;
-            padding: 24px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
-        }
-
-        .label {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.5;
-            margin-bottom: 8px;
-        }
-
-        .amount {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--success-color);
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(74, 222, 128, 0.2));
-        }
-
-        /* Kichik statistika bloklari */
-        .stats-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .stat-box {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 18px;
-            padding: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .stat-val {
-            font-size: 16px;
-            font-weight: 700;
-            margin-top: 4px;
-        }
-
-        /* Grafik qismi */
-        .chart-box {
-            margin-top: 24px;
-            background: var(--card-bg);
-            border-radius: 28px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Tugma */
-        .main-btn {
-            background: #38bdf8;
-            color: #0f172a;
-            border: none;
-            width: 100%;
-            padding: 16px;
-            border-radius: 18px;
-            font-size: 16px;
-            font-weight: 700;
-            margin-top: 24px;
-            transition: all 0.2s;
-        }
-
-        .main-btn:active {
-            transform: scale(0.96);
-            opacity: 0.9;
-        }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #0e1117; color: white; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        /* ChatGPT Chat Oynasi */
+        .chat-container { flex: 1; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
+        .message { margin-bottom: 15px; padding: 10px 15px; border-radius: 15px; max-width: 80%; line-height: 1.4; }
+        .ai { background: #21262d; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .user { background: #007bff; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-input { background: #161b22; padding: 15px; display: flex; gap: 10px; border-top: 1px solid #30363d; }
+        input { flex: 1; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 8px; outline: none; }
+        
+        /* Menyu Tugmasi */
+        .menu-btn { position: fixed; top: 15px; right: 15px; background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(0,123,255,0.3); z-index: 100; }
+        
+        /* Menyu Oynasi */
+        .side-menu { position: fixed; top: 0; right: -100%; width: 250px; height: 100%; background: #161b22; transition: 0.3s; padding: 60px 20px 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 90; }
+        .side-menu.active { right: 0; }
+        .menu-item { padding: 15px; border-bottom: 1px solid #30363d; cursor: pointer; display: block; text-decoration: none; color: white; font-size: 18px; }
+        .menu-item:hover { background: #21262d; }
+        
+        /* Hisobot Oynasi (Grafik) */
+        #report-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0e1117; z-index: 110; display: none; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .back-btn { background: #30363d; color: white; border: none; padding: 10px; border-radius: 8px; margin-bottom: 20px; width: 100%; font-weight: bold; }
+        .card { background: #161b22; border-radius: 16px; padding: 20px; margin-bottom: 20px; text-align: center; }
+        .balance { font-size: 28px; color: #00ff88; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="header animate__animated animate__fadeIn">
-        <div class="user-info">
-            <div class="avatar" id="user-avatar">A</div>
-            <div id="user-name" style="font-weight: 600;">AbuBakr</div>
+    <button class="menu-btn" onclick="toggleMenu()">☰ Menyu</button>
+
+    <div class="chat-container">
+        <div class="message ai">Salom Abubakr! Bugun qanday xarajatlarni hisobga olamiz? Men ChatGPT kabi aqlliman, so'rashingiz mumkin.</div>
+    </div>
+    <div class="chat-input">
+        <input type="text" placeholder="Xabarni yozing...">
+        <button style="background:none; border:none; color:#007bff; font-weight:bold; cursor:pointer;">Yuborish</button>
+    </div>
+
+    <div id="sideMenu" class="side-menu">
+        <div class="menu-item" onclick="showReport()">📊 Hisobot</div>
+        <div class="menu-item">⚙️ Sozlamalar</div>
+        <div class="menu-item" onclick="toggleMenu()">❌ Yopish</div>
+    </div>
+
+    <div id="report-screen">
+        <button class="back-btn" onclick="hideReport()">⬅️ Ortga qaytish (Chatga)</button>
+        <div class="card">
+            <p style="color: #8b949e; margin: 0;">UMUMIY BALANS</p>
+            <div class="balance">12 450 000 UZS</div>
         </div>
-        <div style="opacity: 0.6; font-size: 12px;">Apr 6, 2026</div>
-    </div>
-
-    <div class="main-card animate__animated animate__zoomIn">
-        <div class="label">Общий баланс</div>
-        <div class="amount" id="total-balance">12 450 000 UZS</div>
-        
-        <div class="stats-row">
-            <div class="stat-box">
-                <div class="label" style="font-size: 10px;">Работа</div>
-                <div class="stat-val" style="color: var(--accent-color);">4 200 000</div>
-            </div>
-            <div class="stat-box">
-                <div class="label" style="font-size: 10px;">Личное</div>
-                <div class="stat-val" style="color: var(--danger-color);">8 250 000</div>
-            </div>
+        <div class="card">
+            <canvas id="financeChart"></canvas>
         </div>
     </div>
-
-    <div class="chart-box animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
-        <div class="label" style="margin-bottom: 15px; text-align: center;">Аналитика расходов</div>
-        <canvas id="financeChart"></canvas>
-    </div>
-
-    <button class="main-btn animate__animated animate__pulse animate__infinite" onclick="closeApp()">
-        Вернуться в чат
-    </button>
 
     <script>
-        // Telegram WebApp sozlamalari
-        let tg = window.Telegram.WebApp;
-        tg.expand(); // Ilovani to'liq ochish
-        tg.headerColor = '#0f172a'; // Tepadagi panel rangi
-
-        // Foydalanuvchi ma'lumotlarini yuklash
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const user = tg.initDataUnsafe.user;
-            document.getElementById('user-name').innerText = user.first_name;
-            document.getElementById('user-avatar').innerText = user.first_name.charAt(0);
+        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active'); }
+        function showReport() { 
+            document.getElementById('report-screen').style.display = 'block'; 
+            toggleMenu();
+            renderChart();
         }
+        function hideReport() { document.getElementById('report-screen').style.display = 'none'; }
 
-        function closeApp() {
-            tg.close();
+        function renderChart() {
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ovqat', 'Yo\'l', 'Uy', 'Boshqa'],
+                    datasets: [{
+                        data: [40, 20, 25, 15],
+                        backgroundColor: ['#ff4b5c', '#007bff', '#ffca28', '#00ff88'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
+            });
         }
-
-        // Grafikni chizish (Doughnut Chart)
-        const ctx = document.getElementById('financeChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Магазин', 'Транспорт', 'Еда', 'Прочее'],
-                datasets: [{
-                    data: [45, 15, 25, 15],
-                    backgroundColor: [
-                        '#38bdf8', 
-                        '#818cf8', 
-                        '#4ade80', 
-                        '#f87171'
-                    ],
-                    borderWidth: 0,
-                    hoverOffset: 15
-                }]
-            },
-            options: {
-                cutout: '75%',
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: '#94a3b8',
-                            padding: 20,
-                            font: { size: 12 }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Telegram ranglariga moslashish
-        document.documentElement.style.setProperty('--tg-theme-bg-color', tg.backgroundColor);
     </script>
 </body>
 </html>
